@@ -5,15 +5,15 @@ import { ExtractJwt, Strategy } from "passport-jwt";
 import { Env } from "src/env";
 import z from "zod";
 
-const tokenSchema = z.object({
-    sub: z.string(),  
+const tokenPayloadSchema = z.object({
+    sub: z.string(),
 })
 
-type TokenSchema = z.infer<typeof tokenSchema>;
+export type UserPayload = z.infer<typeof tokenPayloadSchema>;
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-    constructor(config: ConfigService<Env,true>){
+    constructor(config: ConfigService<Env, true>) {
         const publicKey = config.get<string>('JWT_PUBLIC_KEY', { infer: true });
 
         super({
@@ -23,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         })
     }
 
-    validate(payload: TokenSchema) {
-        return tokenSchema.parse(payload);
+    validate(payload: UserPayload) {
+        return tokenPayloadSchema.parse(payload);
     }
 }

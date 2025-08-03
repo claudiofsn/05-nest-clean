@@ -7,10 +7,10 @@ import {
     UnauthorizedException,
     UsePipes,
 } from '@nestjs/common'
-import { PrismaService } from 'src/prisma/prisma.service'
+import { PrismaService } from '@/prisma/prisma.service'
 import { hash } from 'bcryptjs'
-import {z} from 'zod'
-import { ZodValidationPipe } from 'src/pipes/zod-validation.pipe'
+import { z } from 'zod'
+import { ZodValidationPipe } from '@/pipes/zod-validation.pipe'
 import { JwtService } from '@nestjs/jwt'
 
 const authenticateBodySchema = z.object({
@@ -46,10 +46,10 @@ export class AuthenticateController {
             throw new UnauthorizedException('Invalid credentials')
         }
 
-       const token = this.jwt.sign({
+        const token = this.jwt.sign({
             sub: user.id,
         })
-        
-        return {token}
+
+        return { token }
     }
 }
