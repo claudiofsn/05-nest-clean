@@ -25,7 +25,7 @@ export class AuthenticateController {
     constructor(private jwt: JwtService, private prisma: PrismaService) { }
 
     @Post()
-    @HttpCode(200)
+    @HttpCode(201)
     @UsePipes(new ZodValidationPipe(authenticateBodySchema))
     async handle(@Body() body: AuthenticateBodySchema) {
         const { email, password } = body
