@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post, UnauthorizedException, UsePipes } from '@nestjs/common';
+import { Body, Controller, Post, UnauthorizedException, UsePipes } from '@nestjs/common';
 import { hash } from 'bcryptjs';
 import { z } from 'zod';
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation.pipe';
@@ -20,7 +20,6 @@ export class AuthenticateController {
   ) {}
 
   @Post()
-  @HttpCode(201)
   @UsePipes(new ZodValidationPipe(authenticateBodySchema))
   async handle(@Body() body: AuthenticateBodySchema) {
     const { email, password } = body;
@@ -45,6 +44,6 @@ export class AuthenticateController {
       sub: user.id,
     });
 
-    return { token };
+    return { access_token: token };
   }
 }
