@@ -1,9 +1,16 @@
-import { Body, Controller, Post, UnauthorizedException, UsePipes } from '@nestjs/common';
-import { hash } from 'bcryptjs';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Post,
+  UnauthorizedException,
+  UsePipes,
+} from '@nestjs/common';
 import { z } from 'zod';
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation.pipe';
-import { JwtService } from '@nestjs/jwt';
-import { PrismaService } from '@/infra/database/prisma/prisma.service';
+import { AuthenticateStudentUseCase } from '@/domain/forum/application/use-cases/authenticate-student';
+import { WrongCredentialsError } from '@/domain/forum/application/use-cases/errors/wrong-credentials-error';
+import { Public } from '@/infra/auth/public';
 
 const authenticateBodySchema = z.object({
   email: z.email(),
@@ -13,37 +20,28 @@ const authenticateBodySchema = z.object({
 type AuthenticateBodySchema = z.infer<typeof authenticateBodySchema>;
 
 @Controller('/sessions')
+@Public()
 export class AuthenticateController {
-  constructor(
-    private jwt: JwtService,
-    private prisma: PrismaService,
-  ) {}
+  constructor(private authenticateStudent: AuthenticateStudentUseCase) {}
 
   @Post()
   @UsePipes(new ZodValidationPipe(authenticateBodySchema))
   async handle(@Body() body: AuthenticateBodySchema) {
     const { email, password } = body;
 
-    const user = await this.prisma.user.findUnique({
-      where: {
-        email,
-      },
-    });
+    const result = await this.authenticateStudent.execute({ email, password });
 
-    if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+    if (result.isLeft()) {
+      const error = result.value;
+
+      switch (error.constructor) {
+        case WrongCredentialsError:
+          throw new UnauthorizedException(error.message);
+        default:
+          throw new BadRequestException(error.message);
+      }
     }
 
-    const passwordMatch = await hash(password, user.password);
-
-    if (!passwordMatch) {
-      throw new UnauthorizedException('Invalid credentials');
-    }
-
-    const token = this.jwt.sign({
-      sub: user.id,
-    });
-
-    return { access_token: token };
+    return { access_token: result.value.accessToken };
   }
 }

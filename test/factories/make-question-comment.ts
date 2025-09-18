@@ -1,7 +1,7 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 // eslint-disable-next-line prettier/prettier
 import { QuestionComment, QuestionCommentProps } from "@/domain/forum/enterprise/entities/question-comments";
-import { faker } from '@faker-js/faker'
+import { faker } from '@faker-js/faker';
 
 export function makeQuestionComment(
   override: Partial<QuestionCommentProps> = {},
@@ -15,5 +15,5 @@ export function makeQuestionComment(
       ...override,
     },
     id,
-  )
+  );
 }
