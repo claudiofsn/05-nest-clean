@@ -1,8 +1,8 @@
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 import {
   AnswerAttachment,
   AnswerAttachmentProps,
-} from '@/domain/forum/enterprise/entities/answer-attachment'
+} from '@/domain/forum/enterprise/entities/answer-attachment';
 // eslint-disable-next-line prettier/prettier
 
 export function makeAnswerAttachments(
@@ -16,5 +16,5 @@ export function makeAnswerAttachments(
       ...override,
     },
     id,
-  )
+  );
 }

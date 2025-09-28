@@ -10,7 +10,7 @@ export class PrismaAnswerMapper {
         authorId: new UniqueEntityID(raw.authorId),
         questionId: new UniqueEntityID(raw.questionId),
         createdAt: raw.createdAt,
-        updatedAt: raw.updated,
+        updatedAt: raw.updatedAt,
       },
       new UniqueEntityID(raw.id),
     );
@@ -23,7 +23,7 @@ export class PrismaAnswerMapper {
       content: question.content,
       questionId: question.questionId.toString(),
       createdAt: question.createdAt,
-      updated: question.updatedAt,
+      updatedAt: question.updatedAt,
     };
   }
 }
