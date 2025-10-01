@@ -1,18 +1,17 @@
-import { Either, left, right } from '@/core/either'
-import { AnswerCommentsRepository } from '../repositories/answer-comments-repository'
-import { NotAllowedError } from './errors/not-allowed-error'
-import { ResourceNotFoundError } from './errors/resource-not-found'
+import { Either, left, right } from '@/core/either';
+import { AnswerCommentsRepository } from '../repositories/answer-comments-repository';
+import { NotAllowedError } from './errors/not-allowed-error';
+import { ResourceNotFoundError } from './errors/resource-not-found';
+import { Injectable } from '@nestjs/common';
 
 interface DeleteAnswerCommentRequest {
-  authorId: string
-  answerCommentId: string
+  authorId: string;
+  answerCommentId: string;
 }
 
-type DeleteAnswerCommentResponse = Either<
-  ResourceNotFoundError | NotAllowedError,
-  object
->
+type DeleteAnswerCommentResponse = Either<ResourceNotFoundError | NotAllowedError, object>;
 
+@Injectable()
 export class DeleteAnswerCommentUseCase {
   constructor(private answerCommentsRepository: AnswerCommentsRepository) {}
 
@@ -20,19 +19,18 @@ export class DeleteAnswerCommentUseCase {
     authorId,
     answerCommentId,
   }: DeleteAnswerCommentRequest): Promise<DeleteAnswerCommentResponse> {
-    const answerComment =
-      await this.answerCommentsRepository.findById(answerCommentId)
+    const answerComment = await this.answerCommentsRepository.findById(answerCommentId);
 
     if (!answerComment) {
-      return left(new ResourceNotFoundError())
+      return left(new ResourceNotFoundError());
     }
 
     if (answerComment.authorId.toString() !== authorId) {
-      return left(new NotAllowedError())
+      return left(new NotAllowedError());
     }
 
-    await this.answerCommentsRepository.delete(answerComment)
+    await this.answerCommentsRepository.delete(answerComment);
 
-    return right({})
+    return right({});
   }
 }

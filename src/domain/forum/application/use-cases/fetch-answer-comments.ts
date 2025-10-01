@@ -1,19 +1,21 @@
-import { Either, right } from '@/core/either'
-import { AnswerComment } from '../../enterprise/entities/answer-comments'
-import { AnswerCommentsRepository } from '../repositories/answer-comments-repository'
+import { Either, right } from '@/core/either';
+import { AnswerComment } from '../../enterprise/entities/answer-comments';
+import { AnswerCommentsRepository } from '../repositories/answer-comments-repository';
+import { Injectable } from '@nestjs/common';
 
 interface FetchAnswerCommentsUseCaseRequest {
-  answerId: string
-  page: number
+  answerId: string;
+  page: number;
 }
 
 type FetchAnswerCommentsUseCaseResponse = Either<
   null,
   {
-    answerComments: AnswerComment[]
+    answerComments: AnswerComment[];
   }
->
+>;
 
+@Injectable()
 export class FetchAnswerCommentsUseCase {
   constructor(private answerCommentsRepository: AnswerCommentsRepository) {}
 
@@ -21,11 +23,10 @@ export class FetchAnswerCommentsUseCase {
     answerId,
     page,
   }: FetchAnswerCommentsUseCaseRequest): Promise<FetchAnswerCommentsUseCaseResponse> {
-    const answerComments =
-      await this.answerCommentsRepository.findManyByAnswerId(answerId, {
-        page,
-      })
+    const answerComments = await this.answerCommentsRepository.findManyByAnswerId(answerId, {
+      page,
+    });
 
-    return right({ answerComments })
+    return right({ answerComments });
   }
 }
