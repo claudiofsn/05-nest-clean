@@ -1,21 +1,21 @@
-import { Entity } from '@/core/entities/entity'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Entity } from '@/core/entities/entity';
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 
 interface AttachmentProps {
-  title: string
-  link: string
+  title: string;
+  url: string;
 }
 
 export class Attachment extends Entity<AttachmentProps> {
   get title() {
-    return this.props.title
+    return this.props.title;
   }
 
-  get link() {
-    return this.props.link
+  get url() {
+    return this.props.url;
   }
 
   static create(props: AttachmentProps, id?: UniqueEntityID) {
-    return new Attachment(props, id)
+    return new Attachment(props, id);
   }
 }
