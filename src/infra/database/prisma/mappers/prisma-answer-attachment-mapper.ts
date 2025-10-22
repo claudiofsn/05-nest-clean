@@ -1,5 +1,5 @@
 import { AnswerAttachment } from '@/domain/forum/enterprise/entities/answer-attachment';
-import { Attachment as PrismaAttachment } from '../../../../../generated/prisma';
+import { Prisma, Attachment as PrismaAttachment } from '../../../../../generated/prisma';
 import { UniqueEntityID } from '@/core/entities/unique-entity-id';
 
 export class PrismaAnswerAttachmentMapper {
@@ -15,5 +15,20 @@ export class PrismaAnswerAttachmentMapper {
       },
       new UniqueEntityID(raw.id),
     );
+  }
+
+  static toPrismaUpdateMany(answerAttachment: AnswerAttachment[]): Prisma.AttachmentUpdateManyArgs {
+    const attachmentsIds = answerAttachment.map((attachment) => attachment.attachmentId.toString());
+
+    return {
+      where: {
+        id: {
+          in: attachmentsIds,
+        },
+      },
+      data: {
+        answerId: answerAttachment[0].answerId.toString(),
+      },
+    };
   }
 }
