@@ -1,19 +1,18 @@
-import { Either, right } from '@/core/either'
-import { Notification } from '../../enterprise/entities/notification'
-import { UniqueEntityID } from '@/core/entities/unique-entity-id'
-import { NotificationsRepository } from '../repositories/notifications-repository'
+import { Either, right } from '@/core/either';
+import { Notification } from '../../enterprise/entities/notification';
+import { UniqueEntityID } from '@/core/entities/unique-entity-id';
+import { NotificationsRepository } from '../repositories/notifications-repository';
+import { Injectable } from '@nestjs/common';
 
 export interface SendNotificationRequest {
-  recipientId: string
-  title: string
-  content: string
+  recipientId: string;
+  title: string;
+  content: string;
 }
 
-export type SendNotificationResponse = Either<
-  null,
-  { notification: Notification }
->
+export type SendNotificationResponse = Either<null, { notification: Notification }>;
 
+@Injectable()
 export class SendNotificationUseCase {
   constructor(private notificationsRepository: NotificationsRepository) {}
 
@@ -26,11 +25,11 @@ export class SendNotificationUseCase {
       recipientId: new UniqueEntityID(recipientId),
       title,
       content,
-    })
+    });
 
-    await this.notificationsRepository.create(notification)
+    await this.notificationsRepository.create(notification);
     return right({
       notification,
-    })
+    });
   }
 }
