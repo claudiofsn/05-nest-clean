@@ -12,7 +12,6 @@ export class InMemoryAnswersRepository implements AnswersRepository {
     this.items.push(answer);
 
     await this.answerAttachmentsRepository.createMany(answer.attachments.getItems());
-    console.debug(answer.attachments.getItems());
     DomainEvents.dispatchEventsForAggregate(answer.id);
   }
 

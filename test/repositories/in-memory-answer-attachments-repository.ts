@@ -5,7 +5,6 @@ export class InMemoryAnswerAttachmentsRepository implements AnswerAttachmentsRep
   public items: AnswerAttachment[] = [];
 
   async createMany(attachments: AnswerAttachment[]): Promise<void> {
-    console.debug(attachments);
     this.items.push(...attachments);
   }
 

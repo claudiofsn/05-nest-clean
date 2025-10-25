@@ -5,15 +5,25 @@ import { InMemoryQuestionAttachmentsRepository } from 'test/repositories/in-memo
 import { InMemoryQuestionsRepository } from 'test/repositories/in-memory-questions-repository';
 import { DeleteQuestionUseCase } from './delete-question';
 import { NotAllowedError } from './errors/not-allowed-error';
+import { InMemoryStudentsRepository } from 'test/repositories/in-memory-students-repository';
+import { InMemoryAttachmentsRepository } from 'test/repositories/in-memory-attachments-repository';
 
 let sut: DeleteQuestionUseCase;
 let inMemoryQuestionAttachmentsRepository: InMemoryQuestionAttachmentsRepository;
 let questionsRepository: InMemoryQuestionsRepository;
+let studentRepository: InMemoryStudentsRepository;
+let attachmentRepository: InMemoryAttachmentsRepository;
 
 describe('Delete Question', () => {
   beforeEach(() => {
+    studentRepository = new InMemoryStudentsRepository();
+    attachmentRepository = new InMemoryAttachmentsRepository();
     inMemoryQuestionAttachmentsRepository = new InMemoryQuestionAttachmentsRepository();
-    questionsRepository = new InMemoryQuestionsRepository(inMemoryQuestionAttachmentsRepository);
+    questionsRepository = new InMemoryQuestionsRepository(
+      inMemoryQuestionAttachmentsRepository,
+      attachmentRepository,
+      studentRepository,
+    );
     sut = new DeleteQuestionUseCase(questionsRepository);
   });
 

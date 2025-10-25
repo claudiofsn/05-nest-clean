@@ -2,7 +2,7 @@ import { BadRequestException, Controller, Get, HttpCode, Param, Query } from '@n
 import z from 'zod';
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation.pipe';
 import { FetchQuestionAnswersUseCase } from '@/domain/forum/application/use-cases/fetch-question-answers';
-import { AnswerPresenter } from '../presenters/answers-presenter';
+import { AnswerPresenter } from '../presenters/answers.presenter';
 
 const pageQueryParamSchema = z
   .string()
